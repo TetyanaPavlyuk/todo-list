@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -52,9 +53,9 @@ class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("task:index")
 
 
-@login_required
-def complete_task(request, pk):
-    task = Task.objects.get(id=pk)
-    task.is_done = not task.is_done
-    task.save()
-    return HttpResponseRedirect(reverse_lazy("task:index"))
+class CompleteTaskView(LoginRequiredMixin, generic.View):
+    def get(self, request, pk, *args, **kwargs):
+        task = Task.objects.get(id=pk)
+        task.is_done = not task.is_done
+        task.save()
+        return redirect(reverse_lazy("task:index"))
