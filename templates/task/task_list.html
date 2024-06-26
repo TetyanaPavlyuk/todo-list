@@ -14,20 +14,17 @@
       {% for task in task_list %}
         <li>
           <div class="border-bottom">
-            <p>
+            <form method="post" action="{% url 'task:task-complete' task.pk %}">
+              {% csrf_token %}
               <span class="fw-bolder">{{ task.content }}</span>
               {% if task.is_done %}
                 <span class="text-success">Done</span>
-                <a href="{% url 'task:task-complete' pk=task.id %}" class="btn btn-secondary link-to-page m-lg-3">
-                  Undo
-                </a>
+                <button type="submit" class="btn btn-secondary m-lg-3">Undo</button>
               {% else %}
                 <span class="text-danger">Not done</span>
-                <a href="{% url 'task:task-complete' pk=task.id %}" class="btn btn-success link-to-page m-lg-3">
-                  Complete
-                </a>
+                <button type="submit" class="btn btn-success m-lg-3">Complete</button>
               {% endif %}
-            </p>
+            </form>
             <span class="text-secondary">Task created: {{ task.created }}</span>
             <span class="text-bg-danger">Task deadline: {{ task.deadline }}</span>
             <p>Tags:
